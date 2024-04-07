@@ -31,7 +31,7 @@ Button {
     style: ButtonStyle {
         label: Image {
             id: buttonLabel
-            source: "../assets/keyboard.svgz"
+            source: "../assets/keyboard.svg"
             fillMode: Image.PreserveAspectFit
             transform: Translate { x: 5 }
             smooth: false

@@ -67,7 +67,7 @@ Item {
         }
         Image {
             id: mask
-            source: "../assets/mask.svgz"
+            source: "../assets/mask.svg"
             sourceSize: Qt.size(faceSize, faceSize)
             smooth: true
         }

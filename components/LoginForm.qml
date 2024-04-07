@@ -19,93 +19,88 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.1
 
 LoginFormLayout {
-
-	property string lastUserName
-	property bool passwordFieldOutlined: config.PasswordFieldOutlined == "true"
+    property string lastUserName
+    property bool passwordFieldOutlined: config.PasswordFieldOutlined == "true"
     property int inputSpacing: 8
 
     signal loginRequest(string username, string password)
 
     function startLogin() {
-        var username = userList.selectedUser
-        var password = passwordField.text
+        var username = userList.selectedUser;
+        var password = passwordField.text;
         loginRequest(username, password);
     }
 
     RowLayout {
-
         Layout.leftMargin: loginButton.width + inputSpacing * 2
         Layout.minimumWidth: passwordField.width + loginButton.width + inputSpacing * 2
 
         TextField {
             id: passwordField
 
-
-        	placeholderText: textConstants.password
+            placeholderText: textConstants.password
             echoMode: TextInput.Password
             onAccepted: startLogin()
-        	focus: true
-
+            focus: true
             font.pointSize: usernameFontSize * 0.9
             implicitWidth: root.width / 5
             implicitHeight: usernameFontSize * 2.75
             opacity: 0.5
-
-            style: TextFieldStyle {
-                textColor: passwordFieldOutlined ? "white" : "black"
-                placeholderTextColor: passwordFieldOutlined ? "white" : "black"
-                background: Rectangle {
-                    radius: 3
-                    border.color: "white"
-                    border.width: 1
-                    color: passwordFieldOutlined ? "transparent" : "white"
-                }
-            }
-
-        	Keys.onEscapePressed: {
+            Keys.onEscapePressed: {
                 loginFormStack.currentItem.forceActiveFocus();
             }
-
             Keys.onPressed: {
                 if (event.key == Qt.Key_Left && !text) {
                     userList.decrementCurrentIndex();
-                    event.accepted = true
+                    event.accepted = true;
                 }
                 if (event.key == Qt.Key_Right && !text) {
                     userList.incrementCurrentIndex();
-                    event.accepted = true
+                    event.accepted = true;
                 }
             }
-
             Keys.onReleased: {
-                if (loginButton.opacity == 0 && length > 0) {
-                    showLoginButton.start()
-                }
-                if (loginButton.opacity > 0 && length == 0) {
-                    hideLoginButton.start()
-                }
+                if (loginButton.opacity == 0 && length > 0)
+                    showLoginButton.start();
+
+                if (loginButton.opacity > 0 && length == 0)
+                    hideLoginButton.start();
+
             }
 
             Connections {
                 target: sddm
                 onLoginFailed: {
-                    passwordField.selectAll()
-                    passwordField.forceActiveFocus()
+                    passwordField.selectAll();
+                    passwordField.forceActiveFocus();
                 }
             }
+
+            style: TextFieldStyle {
+                textColor: "black"
+                placeholderTextColor: "black"
+
+                background: Rectangle {
+                    radius: 3
+                    border.color: "black"
+                    border.width: 1
+                    color: passwordFieldOutlined ? "transparent" : "white"
+                }
+
+            }
+
         }
-        
+
         Image {
             id: loginButton
 
             Layout.leftMargin: inputSpacing
-
-            source: "../assets/login.svgz"
+            source: "../assets/login.svg"
             sourceSize: Qt.size(passwordField.height, passwordField.height)
             smooth: true
             opacity: 0
@@ -113,26 +108,29 @@ LoginFormLayout {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: startLogin();
+                onClicked: startLogin()
             }
 
             PropertyAnimation {
                 id: showLoginButton
+
                 target: loginButton
                 properties: "opacity"
                 to: 0.75
                 duration: 100
             }
-            
+
             PropertyAnimation {
                 id: hideLoginButton
+
                 target: loginButton
                 properties: "opacity"
                 to: 0
                 duration: 80
             }
+
         }
-        
+
     }
 
 }

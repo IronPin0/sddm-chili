@@ -93,7 +93,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             Layout.bottomMargin: actionItemsLayout.height * 4
 
-            spacing: usernameFontSize * 2
+            spacing: usernameFontSize * 4
         }
     }
 }

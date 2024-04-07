@@ -17,37 +17,58 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.2
 import QtGraphicalEffects 1.0
+import QtQuick 2.2
 
 FocusScope {
     id: backgroundComponent
 
     property alias imageSource: backgroundImage.source
-    property bool configBlur: config.blur == "true"
+    property bool isBlurActive: config.blur == "true"
 
     Image {
         id: backgroundImage
 
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-
         clip: true
         focus: true
         smooth: true
     }
+    
+    RadialGradient {
+        id: mask
+        anchors.fill: backgroundImage
+        gradient: Gradient {
+            GradientStop {
+                position: 0.2
+                color: "#ffffffff"
+            }
 
-    RecursiveBlur {
+            GradientStop {
+                position: 1
+                color: "#00ffffff"
+            }
+        }
+        horizontalOffset: 0
+        verticalOffset: 0
+        horizontalRadius: parent.height
+        verticalRadius: parent.height
+    }
+
+    MaskedBlur {
         id: backgroundBlur
 
         anchors.fill: backgroundImage
         source: backgroundImage
-        radius: configBlur ? config.recursiveBlurRadius : 0
-        loops: configBlur ? config.recursiveBlurLoops : 0
+        maskSource: mask
+        radius: isBlurActive ? config.blurRadius : 0
+        samples: isBlurActive ? config.blurSamples : 0
     }
 
     MouseArea {
         anchors.fill: parent
         onClicked: container.focus = true
     }
+
 }
